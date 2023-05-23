@@ -1,0 +1,1 @@
+docker run --name mariadblts --hostname="mariadblts" --privileged=true -v /my/own/datadir:/var/lib/mysql -p 3307:3306 --restart=always -d mariadb:ltsv1 --sql_mode=NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION --explicit_defaults_for_timestamp=true

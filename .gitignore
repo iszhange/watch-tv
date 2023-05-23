@@ -14,3 +14,7 @@ _book
 *.epub
 *.mobi
 *.pdf
+go.sum
+*.log
+config.yml
+.idea
