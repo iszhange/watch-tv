@@ -1,3 +1,11 @@
 watchtv:
   http: :6666
-  
+
+databases:
+  mariadb:
+    host:
+    port:
+    user:
+    password:
+    database:
+    charset:

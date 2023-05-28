@@ -14,6 +14,7 @@ func NewRouter() *chi.Mux {
 	// 启用中间件
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Recoverer)
+	r.Use(mymiddleware.Gorm)
 	r.Use(mymiddleware.Tracing)
 	r.Use(middleware.Compress(5, "text/html", "application/json"))
 	r.Use(middleware.Heartbeat("/ping"))
