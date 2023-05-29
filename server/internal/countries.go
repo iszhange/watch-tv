@@ -27,6 +27,17 @@ func (o Countries) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var model models.Country
-	model.Inst, _ = r.Context().Value(utils.GormContextKey("DB")).(*gorm.DB)
+	db, _ := r.Context().Value(utils.GormContextKey).(*gorm.DB)
+	model.SetDB(db)
+	total, data := model.GetList(request)
 
+	utils.RespondWithJSON(w, map[string]interface{}{
+		"request_id": reqID,
+		"code":       200,
+		"message":    "成功",
+		"data": map[string]interface{}{
+			"total": total,
+			"list":  data,
+		},
+	})
 }

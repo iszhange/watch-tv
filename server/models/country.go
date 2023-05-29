@@ -7,10 +7,7 @@ import (
 )
 
 type Country struct {
-	Inst *gorm.DB
-}
-
-type CountryModel struct {
+	inst *gorm.DB
 	gorm.Model
 	Name      string `json:"name"`
 	Code      string `json:"code"`
@@ -19,12 +16,24 @@ type CountryModel struct {
 	IsShow    int    `json:"is_show"`
 }
 
-func (o *Country) GetList(query requests.Country) []CountryModel {
+func (o Country) TableName() string {
+	return "wt_countries"
+}
+
+func (o *Country) SetDB(db *gorm.DB) {
+	o.inst = db
+}
+
+func (o *Country) GetList(query requests.Country) (int, []Country) {
+	var countries []Country
+	country := Country{}
 	if query.Code != "" {
-		o.Inst.Where("code = ?", query.Code)
+		country.Code = query.Code
 	}
 	if query.IsShow > 0 {
-		o.Inst.Where("is_show = ?", query.IsShow)
+		country.IsShow = query.IsShow
 	}
+	result := o.inst.Where(&country).Find(&countries)
 
+	return int(result.RowsAffected), countries
 }

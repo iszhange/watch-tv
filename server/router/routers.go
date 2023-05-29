@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"watchtv/internal"
 	mymiddleware "watchtv/middleware"
 	"watchtv/utils"
 
@@ -13,8 +14,8 @@ func NewRouter() *chi.Mux {
 	r := chi.NewRouter()
 	// 启用中间件
 	r.Use(middleware.RequestID)
-	r.Use(middleware.Recoverer)
 	r.Use(mymiddleware.Gorm)
+	r.Use(middleware.Recoverer)
 	r.Use(mymiddleware.Tracing)
 	r.Use(middleware.Compress(5, "text/html", "application/json"))
 	r.Use(middleware.Heartbeat("/ping"))
@@ -27,6 +28,9 @@ func NewRouter() *chi.Mux {
 			"message":    "WatchTV Server.",
 		})
 	})
+
+	var countries internal.Countries
+	r.Get("/countries", countries.List)
 
 	return r
 }

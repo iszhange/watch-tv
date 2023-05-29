@@ -1,3 +1,5 @@
 package utils
 
-type GormContextKey string
+type GormContextKeyType string
+
+const GormContextKey GormContextKeyType = "GormDB"

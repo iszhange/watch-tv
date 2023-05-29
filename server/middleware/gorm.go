@@ -9,13 +9,18 @@ import (
 	"net/http"
 	"time"
 	"watchtv/utils"
+
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func Gorm(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		reqID := middleware.GetReqID(ctx)
 		db := utils.GetMariaDBInstance()
-		timeoutContext, _ := context.WithTimeout(context.Background(), time.Second*30)
-		ctx := context.WithValue(r.Context(), utils.GormContextKey("DB"), db.WithContext(timeoutContext))
+		timeoutCtx, _ := context.WithTimeout(context.Background(), time.Second*30)
+		ctx = context.WithValue(ctx, middleware.RequestIDKey, reqID)
+		ctx = context.WithValue(ctx, utils.GormContextKey, db.WithContext(timeoutCtx))
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
