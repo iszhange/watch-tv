@@ -32,5 +32,11 @@ func NewRouter() *chi.Mux {
 	var countries internal.Countries
 	r.Get("/countries", countries.List)
 
+	var channels internal.Channels
+	r.Get("/channels", channels.List)
+
+	var streams internal.Streams
+	r.Get("/streams", streams.List)
+
 	return r
 }

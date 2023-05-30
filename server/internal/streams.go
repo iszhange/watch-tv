@@ -9,11 +9,11 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-type Countries struct{}
+type Streams struct{}
 
-func (o Countries) List(w http.ResponseWriter, r *http.Request) {
+func (o Streams) List(w http.ResponseWriter, r *http.Request) {
 	reqID := middleware.GetReqID(r.Context())
-	var request requests.Country
+	var request requests.Stream
 	request.Parse(r)
 	err := request.Validate()
 	if err != nil {
@@ -25,7 +25,7 @@ func (o Countries) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var model models.Country
+	var model models.Stream
 	model.SetDB(r.Context())
 	total, data := model.GetList(request)
 
