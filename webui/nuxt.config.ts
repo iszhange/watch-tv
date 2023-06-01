@@ -8,8 +8,11 @@ export default defineNuxtConfig({
       meta: [
         { name: 'description', content: 'Watch TV Web Site.' }
       ],
-    }
+    },
   },
   ssr: false,
-  modules: ['@element-plus/nuxt'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+  ],
+  css: ['@/assets/css/main.css'],
 })
