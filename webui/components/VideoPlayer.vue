@@ -1,7 +1,7 @@
 <template>
   <div id="video-player"></div>
   <div ref="headerbox" class="flex justify-center">
-    <div class="inline-block">
+    <div v-if="curCountry" class="inline-block">
       <button type="button" class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-3 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
       <span class="flex items-center">
         <span class="fi fi-gr"></span>
@@ -9,7 +9,7 @@
       </span>
     </button>
 
-    <ul class="absolute z-10 mt-1 max-h-56 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" tabindex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-option-3">
+    <ul v-if="countries" class="absolute z-10 mt-1 max-h-56 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm" tabindex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-option-3">
       <!--
         Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
 
@@ -38,23 +38,24 @@ import 'mui-player/dist/mui-player.min.css'
 import "/node_modules/flag-icons/css/flag-icons.min.css"
 import MuiPlayer from 'mui-player'
 import Hls from 'hls.js'
-import { onMounted, onUnmounted, defineProps, ref } from 'vue'
+import { onMounted, onUnmounted, defineProps, ref, watch } from 'vue'
 
 const propos = defineProps({
   title: String,
   src: String,
   poster: String,
+  countries: Array,
 })
 
 const headerbox = ref(null)
+const curCountry = ref(null);
 let mp;
-let countries = [
-{name:"大阿拉伯利比亚人民社会主义民主国", flag:"CN"},
-  {name:"中国", flag:"CN"},
-  
-  {name:"美国", flag:"US"},
-];
-let curCountry = countries[0];
+
+watch(propos.countries, async (newVal) => {
+  if (newVal.length > 0) {
+    curCountry = newVal[0]
+  }
+})
 
 onMounted(() => {
   mp = new MuiPlayer({

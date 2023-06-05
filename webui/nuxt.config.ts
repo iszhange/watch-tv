@@ -15,4 +15,9 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
   ],
   css: ['@/assets/css/main.css'],
+  runtimeConfig: {  
+  },
+  appConfig: {
+    apiHost: "http://127.0.0.1:81"
+  }
 })
