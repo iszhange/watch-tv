@@ -6,7 +6,7 @@
                  poster="" 
                  :countries="countries"
                  :channels="channels"
-                 :streams="streams"
+                 :streams="channelStreams"
                  @update-channel="getChannels"
                  @update-stream="getStreams" />
   </div>
@@ -17,7 +17,7 @@ definePageMeta({ layout: 'default' })
 const appConfig = useAppConfig()
 const countries = ref(Array)
 const channels = ref(Array)
-const streams = ref(Array)
+const channelStreams = ref(Array)
 
 await $fetch('/countries', {
   baseURL: appConfig.apiHost,
@@ -56,7 +56,7 @@ function getStreams(channel) {
     }
   }).then(res => {
     if (res.code == 200) {
-      streams.value = res.data.list
+      channelStreams.value = res.data.list
     }
   }).catch(err => {
     console.log(err)
