@@ -13,8 +13,25 @@ export default defineNuxtConfig({
   ssr: false,
   modules: [
     '@nuxtjs/tailwindcss',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: [
+          // 自动引入 `defineStore()`
+          'defineStore',
+          // 自动引入 `defineStore()` 并重命名为 `definePiniaStore()`
+          ['defineStore', 'definePiniaStore'],
+        ],
+      },
+    ],
+    '@pinia-plugin-persistedstate/nuxt',
   ],
-  css: ['@/assets/css/main.css'],
+  piniaPersistedstate: {
+    storage: 'localStorage',
+  },
+  css: [
+    '@/assets/css/main.css',
+  ],
   runtimeConfig: {  
   },
   appConfig: {

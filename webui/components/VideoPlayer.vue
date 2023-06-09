@@ -1,13 +1,13 @@
 <template>
-<div class="relative w-full vw-16 vh-9">
+<div class="group relative w-full vw-16 vh-9">
   <div id="video-player"></div>
-  <div class="absolute top-0 w-full" id="header" >
+  <div class="hidden group-hover:block absolute top-0 w-full" id="header" >
     <div class="flex justify-center">
-      <div v-if="curCountry" class="inline-block">
+      <div v-if="videoplayer.country" class="inline-block">
         <button type="button" class="relative peer w-full cursor-pointer rounded-md py-1.5 pl-3 pr-3 text-left text-gray-900 sm:text-sm sm:leading-6" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
           <span class="flex items-center">
-            <span :class="'fi fi-' + curCountry.code.toLowerCase()"></span>
-            <span class="ml-3 block truncate">{{ curCountry.name }}</span>
+            <span :class="'fi fi-' + videoplayer.country.code.toLowerCase()"></span>
+            <span class="ml-3 block truncate">{{ videoplayer.country.name }}</span>
           </span>
         </button>
 
@@ -26,10 +26,10 @@
       </div>
     </div>
   </div>
-  <div class="absolute top-0 left-0 h-full w-52 cursor-pointer" id="side">
+  <div class="hidden group-hover:block absolute top-0 left-0 h-full w-52 cursor-pointer" id="side">
     <ul role="list" class="p-3 h-full w-full overflow-y-auto bg-gray-300 bg-opacity-10">
       <li class="flex py-4 hover:scale-105" 
-          v-for="(item, index) in channels" 
+          v-for="(item, index) in videoplayer.channels" 
           :key="index" 
           @click="changeChannel(index)" >
         <img class="h-10 w-10 rounded-full" :src=item.logo alt="">
@@ -62,32 +62,32 @@ const emits = defineEmits([
   'updateStream'
 ])
 
-const curCountry = ref()
-const curChannel = ref()
+const videoplayer = useVideoPlayerStore()
 let mp;
 
 // 国家
-watch(curCountry, async (newVal, oldVal) => {
+watch(() => videoplayer.country, async (newVal, oldVal) => {
   emits('updateChannel', newVal.code)
 })
-if (propos.countries.length > 0) {
-  curCountry.value = propos.countries[0]
+if (propos.countries.length>0 && !videoplayer.country) {
+  videoplayer.country = propos.countries[0]
 }
 function changeCountry(index) {
-  curCountry.value = propos.countries[index];
+  videoplayer.country = propos.countries[index];
 }
 
 // 频道
-watch(curChannel, async (newVal, oldVal) => {
+watch(() => videoplayer.channel, async (newVal, oldVal) => {
   emits('updateStream', newVal.id)
 })
 watch(() => propos.channels, async (newVal, oldVal) => {
-  if (propos.channels.length>0 && !curChannel.value) {
-    curChannel.value = propos.channels[0]
+  videoplayer.channels = propos.channels
+  if (propos.channels.length>0 && !videoplayer.channel) {
+    videoplayer.channel = propos.channels[0]
   }
 })
 function changeChannel(index) {
-  curChannel.value = propos.channels[index]
+  videoplayer.channel = propos.channels[index]
 }
 
 // 视频流
@@ -100,7 +100,7 @@ onMounted(() => {
   mp = new MuiPlayer({
     container: "#video-player",
     //title: propos.title,
-    src: "",
+    src: String(videoplayer.stream ? videoplayer.stream.url : ''),
     autoFit: true,
     autoplay: true,
     objectFit: "cover",
@@ -118,9 +118,10 @@ onMounted(() => {
 
   // 视频流
   watch(() => propos.streams, async (newVal, oldVal) => {
-    
+    videoplayer.streams = propos.streams
     if (propos.streams.length > 0) {
       mp.reloadUrl(propos.streams[0].url)
+      videoplayer.stream = propos.streams[0]
     } else {
       mp.showToast("未找到IPTV源")
     }  
