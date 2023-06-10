@@ -1,0 +1,17 @@
+{
+  "name": "electron",
+  "productName": "electron",
+  "description": "My Electron application description",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.0",
+  "author": "zhangkaizhuang",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@electron-forge/cli": "^6.1.1",
+    "electron": "25.1.0"
+  }
+}
