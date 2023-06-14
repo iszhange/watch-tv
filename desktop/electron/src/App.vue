@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+
+const countries = await window.WatchTVAPI.countries({})
+console.log(countries)
 </script>
 
 <template>

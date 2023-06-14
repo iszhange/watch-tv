@@ -17,7 +17,7 @@ export default defineConfig({
         entry: 'electron/main.ts',
       },
       {
-        entry: 'electron/preloads/index.ts',
+        entry: 'electron/preload.ts',
         onstart(options) {
           options.reload()
         }
