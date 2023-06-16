@@ -21,14 +21,14 @@ async function netGetCountries(query: object) {
   })
   let data = ''
   request.on('response', (response) => {
-    console.log(`STATUS: ${response.statusCode}`)
-    console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
+    // console.log(`STATUS: ${response.statusCode}`)
+    // console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
     response.on('data', (chunk) => {
-      console.log(`BODY: ${chunk}`)
+      // console.log(`BODY: ${chunk}`)
       data += chunk
     })
     response.on('end', () => {
-      console.log('No more data in response.')
+      // console.log('No more data in response.')
       return data
     })
   })
@@ -58,14 +58,14 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   // 禁用CSP
-  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': '*',
-      }
-    })
-  })
+  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  //   callback({
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       'Content-Security-Policy': "default-src 'none'",
+  //     }
+  //   })
+  // })
 
   // 网络请求事件
   ipcMain.handle('net:api:countries', (event, params) => netGetCountries(params))

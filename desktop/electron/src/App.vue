@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import { onMounted, ref, watch } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 
-const countries = await window.WatchTVAPI.countries({})
-console.log(countries)
+const countries = ref(Array)
+
+onMounted(() => {
+  countries.value = window.WatchTVAPI.countries({})
+  watch(countries, async (newVal, oldVal) => {
+    console.log(newVal)
+  })
+})
+// console.log(countries)
 </script>
 
 <template>
@@ -14,6 +22,7 @@ console.log(countries)
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <div>{{ countries[0] }}</div>
   <HelloWorld msg="Vite + Vue" />
 </template>
 
